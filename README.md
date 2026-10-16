@@ -11,8 +11,9 @@ Department of Electronic and Telecommunication Engineering, University of Moratu
 
 ---
 
-## Group Name - Pattern Pioneers 
+## Team
 
+**Group No.:** `<GROUP_NO>`
 
 | Name | Index No. |
 |------|-----------|
@@ -134,19 +135,33 @@ Parameter count and model size (MB) are computed automatically.
 
 ## Results
 
-> Fill these tables from your own runs. All values below are placeholders.
+> Custom-model results below come from the Model A and Model B notebooks. Optimizer and SOTA rows are still `TBD` until those notebooks are run.
 
 ### Custom models (Part 4)
 
 | Metric | Model A | Model B |
 |--------|---------|---------|
 | Trainable parameters | 914,122 | 67,179 |
-| Model size on disk (KB) | `TBD` | `TBD` |
-| Training time per epoch (s) | `TBD` | `TBD` |
-| CPU latency per image (ms) | `TBD` | `TBD` |
-| Test accuracy (%) | `TBD` | `TBD` |
-| Macro precision | `TBD` | `TBD` |
-| Macro recall | `TBD` | `TBD` |
+| MACs per image | 60,687,616 | 11,803,136 |
+| Epochs trained | 20 | 25 |
+| Optimizer | Adam (lr 1e-3) | Adam (lr 1e-3) |
+| Model size on disk (KB) | 3,575.2 | 286.8 |
+| Training time per epoch (s) | 55.8 | 181.5 * |
+| CPU latency per image (ms, batch 1) | 3.62 | 5.87 |
+| Best validation accuracy (%) | 94.52 | 93.98 |
+| Test accuracy (%) | 94.42 | 94.32 |
+| Macro precision | 0.9442 | 0.9428 |
+| Macro recall | 0.9436 | 0.9420 |
+| Macro F1 | 0.9436 | 0.9419 |
+
+\* Mean over 24 of Model B's 25 epochs. Epoch 13 took 10,675 s because the machine stalled (it is excluded here); the median epoch time is 168.8 s. Timings are from a CPU-only laptop.
+
+**Observations**
+
+- Model B has **13.6x fewer parameters**, **5.1x fewer MACs** and a **12.5x smaller file**, yet its test accuracy is within 0.1 percentage points of Model A (94.32% vs 94.42%).
+- Fewer MACs did not mean faster CPU execution: Model B is about 3x slower per epoch and 1.6x slower per image, because depthwise convolutions and BatchNorm have low arithmetic intensity and are poorly optimised on CPU.
+- Both models make the same main mistakes: PermanentCrop vs HerbaceousVegetation, AnnualCrop vs PermanentCrop, and Industrial vs Residential. Model A also confuses Highway with River (11 images), while Model B confuses River with AnnualCrop (17 images).
+- Model B was trained for 25 epochs and Model A for 20; both exceed the 20-epoch minimum.
 
 ### Optimizer comparison (Part 3, Model A)
 
@@ -160,7 +175,7 @@ Parameter count and model size (MB) are computed automatically.
 
 | Model | Parameters | Size | Test accuracy | Time per epoch |
 |-------|-----------|------|---------------|----------------|
-| Model B (custom) | 67,179 | `TBD` KB | `TBD` | `TBD` |
+| Model B (custom) | 67,179 | 286.8 KB | 94.32% | 181.5 s |
 | MobileNetV2 | `TBD` | `TBD` MB | `TBD` | `TBD` |
 | ShuffleNetV2 | `TBD` | `TBD` MB | `TBD` | `TBD` |
 
@@ -275,3 +290,6 @@ This work was completed by the group named above for EN3150. Third-party resourc
 
 ---
 
+## License
+
+For academic use as part of the EN3150 course at the University of Moratuwa.
