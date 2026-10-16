@@ -11,9 +11,8 @@ Department of Electronic and Telecommunication Engineering, University of Moratu
 
 ---
 
-## Team
+## Pattern Pioneers - Group Members
 
-**Group No.:** `<GROUP_NO>`
 
 | Name | Index No. |
 |------|-----------|
