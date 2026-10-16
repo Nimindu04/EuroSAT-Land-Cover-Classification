@@ -13,10 +13,14 @@ Department of Electronic and Telecommunication Engineering, University of Moratu
 
 ## Team
 
-| Group No. | Name | Index No. |
-|-----------|------|-----------|
-| `<GROUP_NO>` | M.V.I. Umayangana | 230657B |
-| `<GROUP_NO>` | `<Member 2 name>` | `<Index No.>` |
+**Group No.:** `<GROUP_NO>`
+
+| Name | Index No. |
+|------|-----------|
+| Pathirana P.T.S. | 230468V |
+| Prishmika H.W.N. | 230500N |
+| Umayangana M.V.I. | 230657B |
+| Tharaka A.K.P.S. | 230635G |
 
 ---
 
