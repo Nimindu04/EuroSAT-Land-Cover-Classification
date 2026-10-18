@@ -135,7 +135,7 @@ Parameter count and model size (MB) are computed automatically.
 
 ## Results
 
-> Custom-model results below come from the Model A and Model B notebooks. Optimizer and SOTA rows are still `TBD` until those notebooks are run.
+> Custom-model results below come from the Model A and Model B notebooks. The optimizer rows are still `TBD` because the uploaded Optimizers notebook has no saved outputs; run it and fill them in.
 
 ### Custom models (Part 4)
 
@@ -173,11 +173,22 @@ Parameter count and model size (MB) are computed automatically.
 
 ### Custom vs. pretrained (Parts 5 and 6)
 
-| Model | Parameters | Size | Test accuracy | Time per epoch |
-|-------|-----------|------|---------------|----------------|
-| Model B (custom) | 67,179 | 286.8 KB | 94.32% | 181.5 s |
-| MobileNetV2 | `TBD` | `TBD` MB | `TBD` | `TBD` |
-| ShuffleNetV2 | `TBD` | `TBD` MB | `TBD` | `TBD` |
+| Model | Parameters | Size | MACs / image | Test accuracy | Macro precision / recall | Time per epoch | CPU latency (ms/img) |
+|-------|-----------|------|--------------|---------------|--------------------------|----------------|----------------------|
+| Model B (custom) | 67,179 | 286.8 KB (0.28 MB) | 11.8 M | 94.32% | 0.9428 / 0.9420 | 181.5 s | 5.87 |
+| MobileNetV2 (fine-tuned) | 2,236,682 | 8.76 MB | 24.5 M | 97.68% | 0.9761 / 0.9759 | 184.4 s (phase 2) | 15.02 |
+| ShuffleNetV2 x1.0 (fine-tuned) | 1,263,854 | 4.98 MB | 11.8 M | 97.48% | 0.9746 / 0.9735 | 128.6 s (phase 2) | 23.20 |
+
+Both pretrained networks were fine-tuned for 15 epochs on the same 70/15/15 split at 64x64: 3 epochs training only the new classifier head (about 33 s and 16 s per epoch for MobileNetV2 and ShuffleNetV2), then 12 epochs training the whole network (the times in the table).
+
+**Observations**
+
+- Both pretrained models beat Model B by about **3.2 to 3.4 percentage points** (97.68% and 97.48% vs 94.32%), at the cost of **19x to 33x more parameters** and **18x to 31x more disk space**.
+- Model B is the fastest on CPU at inference (5.87 ms per image vs 15.02 ms and 23.20 ms) and the only one far below a 1 MB flash budget.
+- ShuffleNetV2 has about the same MACs as Model B (11.8 M) but is about 4x slower per image on CPU, showing that MAC count alone does not predict latency.
+- MobileNetV2 is the most accurate, but its 8.76 MB model and 24.5 M MACs per image are the heaviest.
+- The pretrained models' most confused pairs include Highway to River (MobileNetV2, 12 images) and HerbaceousVegetation to PermanentCrop (ShuffleNetV2, 11 images). Model B's largest confusions are PermanentCrop to HerbaceousVegetation (22), Industrial to Residential (19) and River to AnnualCrop (17).
+- Epoch time for ShuffleNetV2 varied from 72 s to 262 s because the laptop's load changed during the run; the table shows the mean.
 
 Figures (loss curves, confusion matrices, comparison plots) are saved in `outputs/figures/`.
 
