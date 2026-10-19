@@ -135,7 +135,7 @@ Parameter count and model size (MB) are computed automatically.
 
 ## Results
 
-> Custom-model results below come from the Model A and Model B notebooks. The optimizer rows are still `TBD` because the uploaded Optimizers notebook has no saved outputs; run it and fill them in.
+> Results below come from the executed notebooks (Model A, Model B, Optimizers, MobileNetV2 and ShuffleNetV2).
 
 ### Custom models (Part 4)
 
@@ -165,11 +165,22 @@ Parameter count and model size (MB) are computed automatically.
 
 ### Optimizer comparison (Part 3, Model A)
 
-| Optimizer | Final val. accuracy | Test accuracy | Epochs to converge |
-|-----------|--------------------|---------------|--------------------|
-| Adam | `TBD` | `TBD` | `TBD` |
-| SGD | `TBD` | `TBD` | `TBD` |
-| SGD + momentum | `TBD` | `TBD` | `TBD` |
+Model A, 20 epochs each, identical initial weights and batch order (fixed seed).
+
+| Optimizer | Learning rate | Best val. accuracy | Epochs to 90% val. accuracy | Val. loss at epoch 5 | Final train loss | Test accuracy | Time per epoch |
+|-----------|---------------|--------------------|-----------------------------|----------------------|------------------|---------------|----------------|
+| **Adam (chosen)** | 1e-3 | 94.37% | 8 | 0.348 | 0.123 | 94.35% | 27.7 s |
+| SGD | 0.01 | 80.40% | not reached | 1.105 | 0.614 | 80.25% | 28.6 s |
+| SGD + momentum 0.9 | 0.01 | 94.15% | 11 | 0.490 | 0.142 | 94.94% | 27.3 s |
+
+**Observations**
+
+- Plain SGD at lr 0.01 is far too slow for 20 epochs: it never reaches 90% validation accuracy and ends about 14 points behind the other two.
+- Adding momentum 0.9 to the same learning rate lifts test accuracy from 80.25% to 94.94%. With a steady gradient, momentum raises the effective step size by about 1/(1-0.9) = 10x.
+- Adam converged fastest (90% validation accuracy at epoch 8 vs 11) and had the lowest validation loss at epoch 5 and the lowest final training loss. It also needs no learning-rate tuning here, which is why it was chosen. Selection is by validation accuracy, where Adam is marginally ahead (94.37% vs 94.15%).
+- On the test set, SGD with momentum is 0.6 points ahead of Adam (94.94% vs 94.35%). The two are close, and this is a single run per optimizer, so we do not claim either has the better final accuracy. Adam's clear advantage is speed of convergence.
+- Time per epoch is the same for all three (about 28 s), so the optimizer choice costs nothing at training time per step. The optimizer state exists only during training and does not change the deployed model size.
+- The momentum sweep (0, 0.5, 0.9, 0.99) was not run, so only the 0, 0.9 and Adam comparisons above are reported.
 
 ### Custom vs. pretrained (Parts 5 and 6)
 
