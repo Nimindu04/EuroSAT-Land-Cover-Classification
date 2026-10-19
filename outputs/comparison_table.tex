@@ -1,0 +1,15 @@
+\begin{table}[h]
+\centering
+\caption{Comparison of the custom and fine-tuned lightweight models on the test set.}
+\label{tab:comparison}
+\begin{tabular}{lrrrrrrrr}
+\hline
+Model & Params & MACs (M) & Size & Time/ep (s) & Latency (ms) & Acc (\%) & Prec (\%) & Rec (\%) \\
+\hline
+Model A & 914,122 & 60.7 & 3.49 MB & 55.8 & 3.62 & 94.42 & 94.42 & 94.36 \\
+Model B & 67,179 & 11.8 & 287 KB & 601.2 & 5.87 & 94.32 & 94.28 & 94.20 \\
+MobileNetV2 & 2,236,682 & 24.5 & 8.76 MB & 184.4 & 15.02 & 97.68 & 97.61 & 97.59 \\
+ShuffleNetV2 & 1,263,854 & 11.8 & 4.98 MB & 128.6 & 23.20 & 97.48 & 97.46 & 97.35 \\
+\hline
+\end{tabular}
+\end{table}
