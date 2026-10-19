@@ -312,6 +312,4 @@ This work was completed by the group named above for EN3150. Third-party resourc
 
 ---
 
-## License
 
-For academic use as part of the EN3150 course at the University of Moratuwa.
